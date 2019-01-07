@@ -2,9 +2,14 @@
 
 import numpy as np
 import pandas as pd
+import pandas_datareader as pdr
 
 
-college = pd.read_csv('data/college.csv')
+def set_trailing_loss(symbol, purchase_date, perc):
+    close = pdr.DataReader(symbol, 'yahoo', start=purchase_date)['Close']
+    return close.cummax() * perc
+
+# college = pd.read_csv('data/college.csv')
 
 # print(college.head())
 # print(college.shape)
@@ -33,13 +38,13 @@ college = pd.read_csv('data/college.csv')
 
 # print(col2.memory_usage(deep=True))
 
-movie = pd.read_csv('data/movie.csv')
-movie2 = movie[['movie_title', 'imdb_score', 'budget']]
+# movie = pd.read_csv('data/movie.csv')
+# movie2 = movie[['movie_title', 'imdb_score', 'budget']]
 # movie2 = movie[['movie_title', 'title_year', 'imdb_score']]
 
-print(movie2.head())
+# print(movie2.head())
 
-print(movie2.sort_values('imdb_score', ascending=False).head(100).sort_values('budget').head())
+# print(movie2.sort_values('imdb_score', ascending=False).head(100).sort_values('budget').head())
 
 # movie_smallest_largest = movie2.nlargest(100, 'imdb_score').nsmallest(5, 'budget')
 
@@ -54,3 +59,19 @@ print(movie2.sort_values('imdb_score', ascending=False).head(100).sort_values('b
 # print(movie2.nlargest(100, 'imdb_score').head())
 
 # print(movie2.nlargest(100, 'imdb_score').nsmallest(5, 'budget').head())
+
+# tsla = pdr.DataReader('tsla', data_source='yahoo', start='2017-1-1')
+
+# print(tsla.head(8))
+
+# tsla_close = tsla['Close']
+
+# tsla_cummax = tsla_close.cummax()
+# print(tsla_cummax.head(8))
+
+# tsla_trailing_stop = tsla_cummax * .9
+# print(tsla_trailing_stop.head(8))
+
+msft_trailing_stop = set_trailing_loss('msft', '2017-6-1', .85)
+
+print(msft_trailing_stop.head(8))
