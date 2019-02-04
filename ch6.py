@@ -4,28 +4,38 @@ import numpy as np
 import pandas as pd
 
 college = pd.read_csv('data/college.csv', index_col='INSTNM')
+college_ugds = college.filter(like='UGDS_')
+print(college_ugds.head())
+
+highest_percentage_race = college_ugds.idxmax(axis='columns')
+vc_highest = highest_percentage_race.value_counts(normalize=True)
+
+print(vc_highest.head())
+
+
+
 # print(college.dtypes)
 
-cols = ['MD_EARN_WNE_P10', 'GRAD_DEBT_MDN_SUPP']
-for col in cols:
-    college[col] = pd.to_numeric(college[col], errors='coerce')
+# cols = ['MD_EARN_WNE_P10', 'GRAD_DEBT_MDN_SUPP']
+# for col in cols:
+#    college[col] = pd.to_numeric(college[col], errors='coerce')
 
 # print(college.dtypes.loc[cols])
 
-college_n = college.select_dtypes(include=[np.number])
+# college_n = college.select_dtypes(include=[np.number])
 # print(college_n.head())
-criteria = college_n.nunique() == 2
-binary_cols = college_n.columns[criteria].tolist()
+# criteria = college_n.nunique() == 2
+# binary_cols = college_n.columns[criteria].tolist()
 # print(binary_cols)
 
-college_n2 = college_n.drop(labels=binary_cols, axis='columns')
+# college_n2 = college_n.drop(labels=binary_cols, axis='columns')
 # print(college_n2.head())
-max_cols = college_n2.idxmax()
+# max_cols = college_n2.idxmax()
 # print(max_cols)
-unique_max_cols = max_cols.unique()
+# unique_max_cols = max_cols.unique()
 
-college_n2.loc[unique_max_cols].style.highlight_max()
-print(college_n2.loc[unique_max_cols].style.highlight_max())
+# college_n2.loc[unique_max_cols].style.highlight_max()
+# print(college_n2.loc[unique_max_cols].style.highlight_max())
 
 # columns = college.columns
 # print(columns)
